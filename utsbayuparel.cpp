@@ -3,22 +3,22 @@
 
 using namespace std;
 
-// 1. STRUCT: Entitas utama kendaraan 
+// 1. STRUCT: Entitas utama kendaraan
 struct DataKendaraan {
     string nomorPlat;
     int jenisKendaraan; // 1 untuk Motor, 2 untuk Mobil
     float waktuMasuk;
 };
 
-// 4. NAMESPACE: Membungkus logika utama [cite: 23]
+// 4. NAMESPACE: Membungkus logika utama 
 namespace LogikaParkir {
     
-    // 6. INLINE FUNCTION: Fungsi pendek untuk efisiensi [cite: 27]
-    inline void sapaPengguna(string pesan = "Selamat Datang di Sistem Parkir") { // 6. DEFAULT ARGUMENT [cite: 26]
+    // 6. INLINE FUNCTION: Fungsi pendek untuk efisiensi 
+    inline void sapaPengguna(string pesan = "Selamat Datang di Sistem Parkir") { // 6. DEFAULT ARGUMENT 
         cout << "\n>>> " << pesan << " <<<" << endl;
     }
 
-    // 7. FUNCTION OVERLOADING: Nama sama, parameter berbeda [cite: 29]
+    // 7. FUNCTION OVERLOADING: Nama sama, parameter berbeda 
     void cetakGaris() { 
         cout << "------------------------------------------" << endl; 
     }
@@ -31,13 +31,13 @@ namespace LogikaParkir {
     float biayaMotor(float durasi) { return durasi * 2000; }
     float biayaMobil(float durasi) { return durasi * 5000; }
 
-    // 5. CALLBACK FUNCTION: Menerima fungsi lain sebagai argumen [cite: 24]
+    // 5. CALLBACK FUNCTION: Menerima fungsi lain sebagai argumen 
     float eksekusiHitung(float d, float (*kalkulator)(float)) {
         return kalkulator(d);
     }
 }
 
-// 3. REFERENCES (&): Akses data tanpa copy (efisien) [cite: 21]
+// 3. REFERENCES (&): Akses data tanpa copy 
 void tampilkanStruk(const DataKendaraan &k, float durasi, float total) {
     LogikaParkir::cetakGaris('=', 30);
     cout << "      STRUK BIAYA PARKIR      " << endl;
@@ -49,7 +49,7 @@ void tampilkanStruk(const DataKendaraan &k, float durasi, float total) {
 }
 
 int main() {
-    // Menggunakan Array Statis (Bukan Vector)
+    // Menggunakan Array Statis 
     DataKendaraan parkir[100]; 
     int jumlahKendaraan = 0;
     int pilihanMenu;
@@ -94,7 +94,7 @@ int main() {
             }
 
             if (index != -1) {
-                // 2. POINTER (*): Navigasi data pada struct [cite: 22]
+                // 2. POINTER (*): Navigasi data pada struct 
                 DataKendaraan* ptrK = &parkir[index]; 
                 
                 float waktuKeluar, total = 0;
