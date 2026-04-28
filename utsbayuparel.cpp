@@ -14,7 +14,7 @@ struct DataKendaraan {
 namespace LogikaParkir {
     
     // INLINE FUNCTION: Fungsi pendek untuk efisiensi 
-    inline void sapaPengguna(string pesan = "Selamat Datang di Sistem Parkir") { // 6. DEFAULT ARGUMENT 
+    inline void sapaPengguna(string pesan = "Selamat Datang di Sistem Parkir!") { // DEFAULT ARGUMENT 
         cout << "\n>>> " << pesan << " <<<" << endl;
     }
 
@@ -94,7 +94,7 @@ int main() {
             }
 
             if (index != -1) {
-                // 2. POINTER (*): Navigasi data pada struct 
+                // POINTER (*): Navigasi data pada struct 
                 DataKendaraan* ptrK = &parkir[index]; 
                 
                 float waktuKeluar, total = 0;
