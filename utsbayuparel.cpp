@@ -1,6 +1,5 @@
 #include <iostream>
 #include <string>
-#include <vector>
 
 using namespace std;
 
@@ -11,15 +10,15 @@ struct DataKendaraan {
     float waktuMasuk;
 };
 
-// 4. NAMESPACE: Membungkus logika utama agar rapi [cite: 23]
+// 4. NAMESPACE: Membungkus logika utama [cite: 23]
 namespace LogikaParkir {
     
-    // 6. INLINE FUNCTION: Optimasi kinerja untuk fungsi pendek [cite: 27]
+    // 6. INLINE FUNCTION: Fungsi pendek untuk efisiensi [cite: 27]
     inline void sapaPengguna(string pesan = "Selamat Datang di Sistem Parkir") { // 6. DEFAULT ARGUMENT [cite: 26]
         cout << "\n>>> " << pesan << " <<<" << endl;
     }
 
-    // 7. FUNCTION OVERLOADING: Nama sama, parameter berbeda 
+    // 7. FUNCTION OVERLOADING: Nama sama, parameter berbeda [cite: 29]
     void cetakGaris() { 
         cout << "------------------------------------------" << endl; 
     }
@@ -28,17 +27,17 @@ namespace LogikaParkir {
         cout << endl;
     }
 
-    // Fungsi perhitungan biaya
+    // Fungsi logika perhitungan
     float biayaMotor(float durasi) { return durasi * 2000; }
     float biayaMobil(float durasi) { return durasi * 5000; }
 
-    // 5. CALLBACK FUNCTION: Menerima fungsi lain sebagai parameter 
+    // 5. CALLBACK FUNCTION: Menerima fungsi lain sebagai argumen [cite: 24]
     float eksekusiHitung(float d, float (*kalkulator)(float)) {
         return kalkulator(d);
     }
 }
 
-// 3. REFERENCES (&): Menghindari penyalinan data berat 
+// 3. REFERENCES (&): Akses data tanpa copy (efisien) [cite: 21]
 void tampilkanStruk(const DataKendaraan &k, float durasi, float total) {
     LogikaParkir::cetakGaris('=', 30);
     cout << "      STRUK BIAYA PARKIR      " << endl;
@@ -50,14 +49,18 @@ void tampilkanStruk(const DataKendaraan &k, float durasi, float total) {
 }
 
 int main() {
+    // Menggunakan Array Statis (Bukan Vector)
     DataKendaraan parkir[100]; 
     int jumlahKendaraan = 0;
     int pilihanMenu;
 
-    LogikaParkir::sapaPengguna(); // Menggunakan default argument
+    LogikaParkir::sapaPengguna(); // Menggunakan Default Argument
 
     do {
-        cout << "\n1. Kendaraan Masuk\n2. Kendaraan Keluar\n3. Selesai\nPilih: ";
+        cout << "\n1. Kendaraan Masuk" << endl;
+        cout << "2. Kendaraan Keluar" << endl;
+        cout << "3. Selesai" << endl;
+        cout << "Pilih Menu: ";
         cin >> pilihanMenu;
 
         if (pilihanMenu == 1) {
@@ -72,6 +75,8 @@ int main() {
                 
                 jumlahKendaraan++;
                 cout << "Data tersimpan!" << endl;
+            } else {
+                cout << "Parkiran Penuh!" << endl;
             }
         } 
         else if (pilihanMenu == 2) {
@@ -89,7 +94,7 @@ int main() {
             }
 
             if (index != -1) {
-                // 2. POINTER (*): Manipulasi alamat memori 
+                // 2. POINTER (*): Navigasi data pada struct [cite: 22]
                 DataKendaraan* ptrK = &parkir[index]; 
                 
                 float waktuKeluar, total = 0;
@@ -97,13 +102,14 @@ int main() {
                 cin >> waktuKeluar;
                 float durasi = waktuKeluar - ptrK->waktuMasuk;
 
-                // Menggunakan Callback logic
+                // Menggunakan Logika Callback
                 if (ptrK->jenisKendaraan == 1) {
                     total = LogikaParkir::eksekusiHitung(durasi, LogikaParkir::biayaMotor);
                 } else {
                     total = LogikaParkir::eksekusiHitung(durasi, LogikaParkir::biayaMobil);
                 }
 
+                // Memanggil fungsi dengan Reference
                 tampilkanStruk(*ptrK, durasi, total);
             } else {
                 cout << "Data tidak ditemukan!" << endl;
@@ -111,6 +117,6 @@ int main() {
         }
     } while (pilihanMenu != 3);
 
-    LogikaParkir::sapaPengguna("Terima Kasih");
+    LogikaParkir::sapaPengguna("Terima Kasih, Program Selesai");
     return 0;
 }
