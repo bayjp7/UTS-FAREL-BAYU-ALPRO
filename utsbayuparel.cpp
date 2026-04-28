@@ -3,22 +3,22 @@
 
 using namespace std;
 
-// 1. STRUCT: Entitas utama kendaraan
+// STRUCT: Entitas utama kendaraan
 struct DataKendaraan {
     string nomorPlat;
     int jenisKendaraan; // 1 untuk Motor, 2 untuk Mobil
     float waktuMasuk;
 };
 
-// 4. NAMESPACE: Membungkus logika utama 
+// NAMESPACE: Membungkus logika utama 
 namespace LogikaParkir {
     
-    // 6. INLINE FUNCTION: Fungsi pendek untuk efisiensi 
+    // INLINE FUNCTION: Fungsi pendek untuk efisiensi 
     inline void sapaPengguna(string pesan = "Selamat Datang di Sistem Parkir") { // 6. DEFAULT ARGUMENT 
         cout << "\n>>> " << pesan << " <<<" << endl;
     }
 
-    // 7. FUNCTION OVERLOADING: Nama sama, parameter berbeda 
+    // FUNCTION OVERLOADING: Nama sama, parameter berbeda 
     void cetakGaris() { 
         cout << "------------------------------------------" << endl; 
     }
@@ -31,13 +31,13 @@ namespace LogikaParkir {
     float biayaMotor(float durasi) { return durasi * 2000; }
     float biayaMobil(float durasi) { return durasi * 5000; }
 
-    // 5. CALLBACK FUNCTION: Menerima fungsi lain sebagai argumen 
+    // CALLBACK FUNCTION: Menerima fungsi lain sebagai argumen 
     float eksekusiHitung(float d, float (*kalkulator)(float)) {
         return kalkulator(d);
     }
 }
 
-// 3. REFERENCES (&): Akses data tanpa copy 
+// REFERENCES (&): Akses data tanpa copy 
 void tampilkanStruk(const DataKendaraan &k, float durasi, float total) {
     LogikaParkir::cetakGaris('=', 30);
     cout << "      STRUK BIAYA PARKIR      " << endl;
