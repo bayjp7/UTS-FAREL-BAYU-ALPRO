@@ -1,120 +1,116 @@
 #include <iostream>
 #include <string>
+#include <vector>
 
 using namespace std;
 
-// DEKLARASI STRUCT
+// 1. STRUCT: Entitas utama kendaraan 
 struct DataKendaraan {
     string nomorPlat;
     int jenisKendaraan; // 1 untuk Motor, 2 untuk Mobil
-    float waktuMasuk;   // Format jam (misal 8.00)
+    float waktuMasuk;
 };
 
-// PENYIMPANAN GLOBAL (Array Biasa)
-DataKendaraan parkir[100]; 
-int jumlahKendaraan = 0;   
+// 4. NAMESPACE: Membungkus logika utama agar rapi [cite: 23]
+namespace LogikaParkir {
+    
+    // 6. INLINE FUNCTION: Optimasi kinerja untuk fungsi pendek [cite: 27]
+    inline void sapaPengguna(string pesan = "Selamat Datang di Sistem Parkir") { // 6. DEFAULT ARGUMENT [cite: 26]
+        cout << "\n>>> " << pesan << " <<<" << endl;
+    }
 
-// FUNGSI MENGHITUNG BIAYA MOTOR
-float hitungBiayaMotor(float durasi) {
-    float biaya = durasi * 2000;
-    return biaya;
+    // 7. FUNCTION OVERLOADING: Nama sama, parameter berbeda 
+    void cetakGaris() { 
+        cout << "------------------------------------------" << endl; 
+    }
+    void cetakGaris(char simbol, int jumlah) { 
+        for(int i = 0; i < jumlah; i++) cout << simbol;
+        cout << endl;
+    }
+
+    // Fungsi perhitungan biaya
+    float biayaMotor(float durasi) { return durasi * 2000; }
+    float biayaMobil(float durasi) { return durasi * 5000; }
+
+    // 5. CALLBACK FUNCTION: Menerima fungsi lain sebagai parameter 
+    float eksekusiHitung(float d, float (*kalkulator)(float)) {
+        return kalkulator(d);
+    }
 }
 
-// FUNGSI MENGHITUNG BIAYA MOBIL
-float hitungBiayaMobil(float durasi) {
-    float biaya = durasi * 5000;
-    return biaya;
+// 3. REFERENCES (&): Menghindari penyalinan data berat 
+void tampilkanStruk(const DataKendaraan &k, float durasi, float total) {
+    LogikaParkir::cetakGaris('=', 30);
+    cout << "      STRUK BIAYA PARKIR      " << endl;
+    LogikaParkir::cetakGaris();
+    cout << "Nomor Plat : " << k.nomorPlat << endl;
+    cout << "Durasi     : " << durasi << " Jam" << endl;
+    cout << "Total Bayar: Rp " << total << endl;
+    LogikaParkir::cetakGaris('=', 30);
 }
 
 int main() {
+    DataKendaraan parkir[100]; 
+    int jumlahKendaraan = 0;
     int pilihanMenu;
-    
-    // MULAI LOOPING MENU UTAMA
+
+    LogikaParkir::sapaPengguna(); // Menggunakan default argument
+
     do {
-        cout << "\n=== MENU UTAMA PARKIR ===" << endl;
-        cout << "1. Kendaraan Masuk" << endl;
-        cout << "2. Kendaraan Keluar" << endl;
-        cout << "3. Selesai" << endl;
-        cout << "Pilih menu: ";
+        cout << "\n1. Kendaraan Masuk\n2. Kendaraan Keluar\n3. Selesai\nPilih: ";
         cin >> pilihanMenu;
-        
+
         if (pilihanMenu == 1) {
-            // PROSES KENDARAAN MASUK (Check-In)
             if (jumlahKendaraan < 100) {
-                cout << "\n=== KENDARAAN MASUK (Check-In) ===" << endl;
-                
-                cout << "Input Nomor Plat (e.g. B1234ABC): ";
-                cin.ignore(); // Membersihkan sisa enter dari cin sebelumnya
+                cout << "Input Nomor Plat: ";
+                cin.ignore();
                 getline(cin, parkir[jumlahKendaraan].nomorPlat);
-                
-                cout << "Input Jenis Kendaraan (1. Motor, 2. Mobil): ";
+                cout << "Jenis (1. Motor, 2. Mobil): ";
                 cin >> parkir[jumlahKendaraan].jenisKendaraan;
-                
-                cout << "Input Waktu Masuk (Jam) (e.g., 8.00): ";
+                cout << "Waktu Masuk (Jam): ";
                 cin >> parkir[jumlahKendaraan].waktuMasuk;
                 
-                jumlahKendaraan = jumlahKendaraan + 1;
-                cout << "Data berhasil disimpan!" << endl;
-            } else {
-                cout << "Kapasitas parkir penuh!" << endl;
+                jumlahKendaraan++;
+                cout << "Data tersimpan!" << endl;
             }
-            
-        } else if (pilihanMenu == 2) {
-            // PROSES KENDARAAN KELUAR (Check-Out)
-            string platKeluar;
-            cout << "\n=== KENDARAAN KELUAR (Check-Out) ===" << endl;
-            cout << "Input Nomor Plat Keluar: ";
+        } 
+        else if (pilihanMenu == 2) {
+            string platCari;
+            cout << "Input Plat Keluar: ";
             cin.ignore();
-            getline(cin, platKeluar);
-            
-            // Cari Data Plat
-            bool ditemukan = false;
-            int indexDitemukan = -1;
-            
+            getline(cin, platCari);
+
+            int index = -1;
             for (int i = 0; i < jumlahKendaraan; i++) {
-                if (parkir[i].nomorPlat == platKeluar) {
-                    ditemukan = true;
-                    indexDitemukan = i;
+                if (parkir[i].nomorPlat == platCari) {
+                    index = i;
                     break;
                 }
             }
-            
-            // Pengecekan Hasil Pencarian
-            if (!ditemukan) {
-                cout << "Data Tidak Ada" << endl;
-            } else {
-                float waktuKeluar;
-                cout << "Input Waktu Keluar (Jam) (e.g., 14.00): ";
+
+            if (index != -1) {
+                // 2. POINTER (*): Manipulasi alamat memori 
+                DataKendaraan* ptrK = &parkir[index]; 
+                
+                float waktuKeluar, total = 0;
+                cout << "Waktu Keluar: ";
                 cin >> waktuKeluar;
-                
-                // Hitung Durasi
-                float durasi = waktuKeluar - parkir[indexDitemukan].waktuMasuk;
-                
-                // Cek Total Biaya Jenis Kendaraan  untuk Memanggil Fungsi yang Sesuai
-                float totalBiaya = 0;
-                int jenis = parkir[indexDitemukan].jenisKendaraan;
-                
-                if (jenis == 1) {
-                    totalBiaya = hitungBiayaMotor(durasi);
-                } else if (jenis == 2) {
-                    totalBiaya = hitungBiayaMobil(durasi);
+                float durasi = waktuKeluar - ptrK->waktuMasuk;
+
+                // Menggunakan Callback logic
+                if (ptrK->jenisKendaraan == 1) {
+                    total = LogikaParkir::eksekusiHitung(durasi, LogikaParkir::biayaMotor);
+                } else {
+                    total = LogikaParkir::eksekusiHitung(durasi, LogikaParkir::biayaMobil);
                 }
-                
-                // Tampilkan Struk
-                cout << "\n--- STRUK BIAYA PARKIR ---" << endl;
-                cout << "Nomor Plat : " << parkir[indexDitemukan].nomorPlat << endl;
-                cout << "Durasi     : " << durasi << " Jam" << endl;
-                cout << "Total Biaya: Rp " << totalBiaya << endl;
-                cout << "--------------------------" << endl;
+
+                tampilkanStruk(*ptrK, durasi, total);
+            } else {
+                cout << "Data tidak ditemukan!" << endl;
             }
-            
-        } else if (pilihanMenu == 3) {
-            cout << "Program Selesai" << endl;
-        } else {
-            cout << "Pilihan tidak valid, silakan coba lagi." << endl;
         }
-        
     } while (pilihanMenu != 3);
-    
+
+    LogikaParkir::sapaPengguna("Terima Kasih");
     return 0;
 }
